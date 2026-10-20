@@ -5,7 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 
 export default defineConfig({
-  base: '/sphere-trainer/',
+  base: '/final-sphere/',
   server: {
     host: true,
   },

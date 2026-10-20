@@ -16,7 +16,7 @@ function bundle() {
   let html = fs.readFileSync(indexPath, 'utf-8');
 
   // 2. Parse and inline CSS stylesheets
-  const cssRegex = /<link rel="stylesheet" crossorigin href="\/sphere-trainer\/assets\/([^"]+)">/g;
+  const cssRegex = /<link rel="stylesheet" crossorigin href="[^"]*\/assets\/([^"]+)">/g;
   html = html.replace(cssRegex, (match, cssFile) => {
     const cssPath = path.join(DIST_DIR, 'assets', cssFile);
     if (fs.existsSync(cssPath)) {
@@ -30,7 +30,7 @@ function bundle() {
   });
 
   // 3. Parse and inline JS scripts
-  const jsRegex = /<script type="module" crossorigin src="\/sphere-trainer\/assets\/([^"]+)"><\/script>/g;
+  const jsRegex = /<script type="module" crossorigin src="[^"]*\/assets\/([^"]+)"><\/script>/g;
   html = html.replace(jsRegex, (match, jsFile) => {
     const jsPath = path.join(DIST_DIR, 'assets', jsFile);
     if (fs.existsSync(jsPath)) {
@@ -49,14 +49,15 @@ function bundle() {
     console.log('⚡ Inlining favicon.svg as Base64...');
     const base64Favicon = fs.readFileSync(faviconPath).toString('base64');
     html = html.replace(
-      /<link rel="icon" type="image\/svg\+xml" href="\/sphere-trainer\/favicon.svg" \/>/,
+      /<link rel="icon" type="image\/svg\+xml" href="[^"]*favicon\.svg" \/>/,
       `<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,${base64Favicon}" />`
     );
   }
 
   // 5. Clean up relative path service worker & manifest references (since they run in a static context)
-  html = html.replace(/<link rel="manifest" href="\/sphere-trainer\/manifest.webmanifest">/, '');
-  html = html.replace(/<script id="vite-plugin-pwa:register-sw" src="\/sphere-trainer\/registerSW.js"><\/script>/, '');
+  html = html.replace(/<link rel="manifest" href="[^"]*manifest\.webmanifest">/, '');
+  html = html.replace(/<script id="vite-plugin-pwa:register-sw" src="[^"]*registerSW\.js"><\/script>/, '');
+
 
   // 6. Output single file HTML
   const singleFileDistPath = path.join(DIST_DIR, 'sphere-trainer-single-web.html');
